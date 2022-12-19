@@ -6,6 +6,9 @@ final class SwiftyDCCTests: XCTestCase {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct
         // results.
-        XCTAssertEqual(SwiftyDCC().text, "Hello, World!")
+        let testSubject = DCCPacket()
+        let result = testSubject.errorCheck(address:0x01,data:0x01)
+
+        XCTAssertEqual(result, 0)
     }
 }

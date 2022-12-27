@@ -1,9 +1,68 @@
 import SwiftIO
 import MadBoard
 
-public struct DCCPacket {
+public enum DCCMode:CaseIterable {
+    case ops
+    case service
+}
 
-    func errorCheck(address:UInt8, data:UInt8) -> UInt8 {
+public enum DCCFunction:CaseIterable {
+    
+}
+
+public struct DCCAddress {
+
+    enum AddressType {
+        case invalid
+        case oneByte
+        case twoByte
+    }
+
+    var extractedBytes:[UInt8] = [UInt8]()
+    var data:UnsafeMutableRawBufferPointer? = nil
+    
+    var type:AddressType {
+        get {
+            if extractedBytes.count == 2 {
+                return .twoByte
+            }else if extractedBytes.count == 1 {
+                return .oneByte
+            }
+            return .invalid
+        }
+    }
+
+    func isAddressSingleByte() -> Bool {
+        guard let d = data else { return false}
+        return false
+    }
+
+    func isAddressDoubleByte() -> Bool {
+        guard let d = data else { return false}
+        return false
+    }
+
+    
+}
+
+public class DCCPacket {
+
+    // can test for this in validation perhaps
+    static let baselineMinimumPacketBitsCount:Int = 38
+    static let extendedMiniumPacketBitsCount:Int = 38
+
+    static let commandStationMinimumPrambleBitCount:UInt8 = 14
+    static let wordSizes:[UInt8] = [0x1,0x2]
+    
+    static let baseLineDataByeCountRange = 3...3
+    static let extendedDataByteCountRange = 3...6
+    static let decoderPreambleRange = 10...12
+
+    
+    
+    var preamble:[UInt8] = [0xFF,0x03] // 1111 1111, 11
+    
+    public static func errorCheck(address:UInt8, data:UInt8) -> UInt8 {
         return address | data
     }
 }
